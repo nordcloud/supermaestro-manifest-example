@@ -1,0 +1,15 @@
+ocfVersion: 0.0.1
+revision: 0.1.0
+kind: InterfaceGroup
+metadata:
+  prefix: "cap.interface.nordcloud"
+  name: "workshop"
+  displayName: "workshop"
+  description: "workshop related Interfaces"
+  documentationURL: https://example.com
+  supportURL: https://example.com
+  iconURL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+  maintainers:
+    - email: dev@example.com
+      name: Example Dev
+      url: https://example.com

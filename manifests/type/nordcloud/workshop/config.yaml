@@ -1,0 +1,40 @@
+ocfVersion: 0.0.1
+revision: 0.1.0
+kind: Type
+metadata:
+  prefix: "cap.type.nordcloud.workshop"
+  name: config
+  displayName: nordcloud.workshop config
+  description: Type representing a nordcloud.workshop config
+  documentationURL: https://example.com
+  supportURL: https://example.com
+  iconURL: https://example.com/icon.png
+  maintainers:
+    - email: dev@example.com
+      name: Example Dev
+      url: https://example.com
+spec:
+  jsonSchema:
+    # TODO(ContentDeveloper): Adjust the JSON schema if needed.
+    value: |-
+      {
+        "$schema": "http://json-schema.org/draft-07/schema",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "$id": "#/properties/name",
+            "type": "string",
+            "description": "Config Name",
+            "title": "Config Name"
+          },
+          "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "description": "Message Content",
+            "title": "Message Content"
+          }
+        }
+      }

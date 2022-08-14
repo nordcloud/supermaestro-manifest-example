@@ -1,0 +1,74 @@
+ocfVersion: 0.0.1
+revision: 0.1.0
+kind: Implementation
+metadata:
+  prefix: "cap.implementation.nordcloud.workshop"
+  name: delete
+  displayName: "delete Action"
+  description: "delete Action"
+  documentationURL: https://example.com
+  supportURL: https://example.com
+  iconURL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+  maintainers:
+    - email: dev@example.com
+      name: Example Dev
+      url: https://example.com
+  license:
+    name: "Apache 2.0"
+
+spec:
+  appVersion: "1.0.0" # TODO(ContentDeveloper): Set the supported application version here
+
+  outputTypeInstanceRelations: {}
+
+  implements:
+    - path: cap.interface.nordcloud.workshop.delete
+      revision: 0.1.0
+
+  requires:
+    cap.core.type.platform:
+      oneOf:
+        - name: kubernetes
+          revision: 0.1.0
+
+  imports:
+    - interfaceGroupPath: cap.interface.runner.argo
+      alias: argo
+      methods:
+        - name: run
+          revision: 0.1.0
+
+  action:
+    runnerInterface: argo.run
+    args:
+      workflow:
+        entrypoint: delete
+        templates:
+          - name: delete
+            inputs:
+              artifacts:
+                - name: config
+            steps:
+              - - name: run-argo-actions
+                  template: run-argo-actions
+                  arguments:
+                    artifacts:
+                      - name: config
+                        from: "{{inputs.artifacts.config}}"
+
+          - name: run-argo-actions
+            inputs:
+              artifacts:
+                - name: config
+                  path: /config.yaml
+            container:
+              image: gcr.io/sm-cluster-dev/argo-actions:v0.7.13
+              env:
+                - name: APP_ACTION
+                  value: "DeleteAction"
+                - name: APP_DELETE_CONFIG_ID_FILEPATH
+                  value: "{{inputs.artifacts.config.path}}"
+                - name: APP_DELETE_CONFIG_UNLOCK
+                  value: "false"
+                - name: APP_DELETE_CONFIG_DELETE_USEDBY
+                  value: "false"

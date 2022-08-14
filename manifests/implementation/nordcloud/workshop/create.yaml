@@ -1,0 +1,79 @@
+ocfVersion: 0.0.1
+revision: 0.1.0
+kind: Implementation
+metadata:
+  prefix: "cap.implementation.nordcloud.workshop"
+  name: create
+  displayName: "create Action"
+  description: "create Action"
+  documentationURL: https://example.com
+  supportURL: https://example.com
+  iconURL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+  maintainers:
+    - email: dev@example.com
+      name: Example Dev
+      url: https://example.com
+  license:
+    name: "Apache 2.0"
+
+spec:
+  appVersion: "1.0.0" # TODO(ContentDeveloper): Set the supported application version here
+
+  outputTypeInstanceRelations:
+      config: {}
+
+  implements:
+    - path: cap.interface.nordcloud.workshop.create
+      revision: 0.1.0
+
+  requires:
+    cap.core.type.platform:
+      oneOf:
+        - name: kubernetes
+          revision: 0.1.0
+
+  imports:
+    - interfaceGroupPath: cap.interface.runner.argo
+      alias: argo
+      methods:
+        - name: run
+          revision: 0.1.0
+
+  action:
+    runnerInterface: argo.run
+    args:
+      workflow:
+        entrypoint: create
+        templates:
+          - name: create
+            inputs:
+              artifacts:
+                - name: input-parameters
+            outputs:
+              artifacts:
+                - name: result
+                  from: "{{steps.generate-artifact.outputs.artifacts.result}}"
+            steps:
+              - - name: generate-artifact
+                  template: echo
+                  arguments:
+                    artifacts:
+                      - name: input
+                        from: "{{inputs.artifacts.input-parameters}}"
+                  capact-outputTypeInstances:
+                    - name: config
+                      from: result
+
+          - name: echo
+            inputs:
+              artifacts:
+                - name: input
+                  path: /input.yaml
+            outputs:
+              artifacts:
+                - name: result
+                  path: /result.yaml
+            container:
+              image: alpine:latest
+              command: [sh, -c]
+              args: ["sleep 1; cat /input.yaml > /result.yaml"]
