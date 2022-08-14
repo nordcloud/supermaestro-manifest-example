@@ -1,0 +1,1 @@
+# supermaestro-manifest-example
